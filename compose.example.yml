@@ -1,0 +1,27 @@
+services:
+  immich-archive:
+    build: .
+    image: immich-archive
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ${AWS_REGION}
+      S3_BUCKET: ${S3_BUCKET}
+      S3_PREFIX: ${S3_PREFIX:-immich}
+      TZ: ${TZ:-UTC}
+      CRON: ${CRON:-0 3 * * *}
+      CONCURRENCY: ${CONCURRENCY:-2}
+      MULTIPART_THRESHOLD_BYTES: ${MULTIPART_THRESHOLD_BYTES:-104857600}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    volumes:
+      - ${UPLOAD_LOCATION}:/data:ro
+      - immich-archive-state:/state
+      # Mount these when Immich keeps them outside UPLOAD_LOCATION:
+      # - ${BACKUP_PATH}:/data/backups:ro
+      # - ${PROFILE_PATH}:/data/profile:ro
+
+volumes:
+  immich-archive-state:

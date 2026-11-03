@@ -1,0 +1,30 @@
+[project]
+name = "immich-archive"
+version = "0.1.0"
+description = "Daily Deep Archive backup for an Immich library, with an admin page."
+requires-python = ">=3.11"
+dependencies = [
+  "boto3>=1.34",
+  "croniter>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "moto[s3,server]>=5",
+]
+
+[project.scripts]
+immich-archive = "immich_archive.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["src", "."]
